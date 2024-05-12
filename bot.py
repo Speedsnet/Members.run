@@ -9,7 +9,7 @@ added_members = set()
 
 def add_members(update, context):
     global added_members
-    chat_id = -1002062094979
+    chat_id = (-1002062094979)
     with open('members.txt', 'r') as file:
         members_list = file.read().splitlines()
 
@@ -35,7 +35,7 @@ def add_members(update, context):
             except BadRequest as e:
                 update.message.reply_text(f"Failed to add members: {e.message}")
         # Wait for 1 hour before adding the next chunk
-        time.sleep(3600)
+        time.sleep(36)
 
 def main():
     updater = Updater(TOKEN, use_context=True)
