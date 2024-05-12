@@ -9,18 +9,21 @@ invited_members = set()
 
 def invite_members(update, context):
     global invited_members
-    chat_id = (-1002062094979)
     with open('members.txt', 'r') as file:
         members_list = file.read().splitlines()
 
     # Filter out already invited members
     new_members = [member for member in members_list if member not in invited_members]
 
-    # Send invitation messages to each member
+    # Send invitation messages to each member's personal chat
     for member in new_members:
         invitation_message = f"Hey @{member}, join our group chat to participate in discussions!"
-        context.bot.send_message(chat_id, invitation_message)
-        invited_members.add(member)
+        try:
+            user = context.bot.get_chat(member)
+            context.bot.send_message(user.id, invitation_message)
+            invited_members.add(member)
+        except TelegramError:
+            pass
 
     update.message.reply_text("Invitation messages sent successfully.")
 
