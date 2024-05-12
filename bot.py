@@ -2,14 +2,14 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 from telegram.error import BadRequest
 import time
 
-TOKEN = ''
+TOKEN = '7062585200:AAFMZQIKse16z4KfCIrg2xHxr-KrvFyPuPE'
 
 # Store the members already added
 added_members = set()
 
 def add_members(update, context):
     global added_members
-    chat_id = ()
+    chat_id = (-1002062094979)
     with open('members.txt', 'r') as file:
         members_list = file.read().splitlines()
     
