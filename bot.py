@@ -9,7 +9,7 @@ added_members = set()
 
 def add_members(update, context):
     global added_members
-    chat_id = (-1002062094979)
+    chat_id = -1002062094979
     with open('members.txt', 'r') as file:
         members_list = file.read().splitlines()
     
@@ -21,7 +21,7 @@ def add_members(update, context):
         chunk = new_members[i:i+13]
         for member in chunk:
             try:
-                context.bot.add_chat_member(chat_id, member)
+                context.bot.send_message(chat_id, f"Adding {member} to the chat...")
                 added_members.add(member)
             except BadRequest:
                 pass
@@ -39,3 +39,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+    
