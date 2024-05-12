@@ -1,5 +1,5 @@
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
-from telegram.error import BadRequest
+from telegram.ext import Updater, CommandHandler
+from telegram.error import BadRequest, TelegramError
 import time
 
 TOKEN = '7062585200:AAFMZQIKse16z4KfCIrg2xHxr-KrvFyPuPE'
@@ -12,19 +12,28 @@ def add_members(update, context):
     chat_id = -1002062094979
     with open('members.txt', 'r') as file:
         members_list = file.read().splitlines()
-    
+
     # Filter out already added members
     new_members = [member for member in members_list if member not in added_members]
-    
+
     # Add 13 members at a time
     for i in range(0, len(new_members), 13):
         chunk = new_members[i:i+13]
+        members_to_add = []
         for member in chunk:
             try:
-                context.bot.send_message(chat_id, f"Adding {member} to the chat...")
-                added_members.add(member)
-            except BadRequest:
+                chat_member = context.bot.get_chat_member(chat_id, member)
+                if chat_member.status == 'left':
+                    members_to_add.append(member)
+            except TelegramError:
                 pass
+        if members_to_add:
+            try:
+                context.bot.add_chat_members(chat_id, members_to_add)
+                added_members.update(members_to_add)
+                update.message.reply_text("Members added successfully.")
+            except BadRequest as e:
+                update.message.reply_text(f"Failed to add members: {e.message}")
         # Wait for 1 hour before adding the next chunk
         time.sleep(3600)
 
